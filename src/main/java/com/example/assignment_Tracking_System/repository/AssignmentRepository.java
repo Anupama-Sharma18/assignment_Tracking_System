@@ -1,4 +1,4 @@
 package com.example.assignment_Tracking_System.repository;
 
-public interface StudentRepository {
+public class AssignmentRepository {
 }
