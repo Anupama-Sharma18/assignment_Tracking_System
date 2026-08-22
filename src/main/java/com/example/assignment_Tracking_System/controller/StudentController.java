@@ -25,7 +25,7 @@ public class StudentController {
 
     private final StudentService studentService;
     private final SubmissionService submissionService;
-    private final AssignmentService assignmentService;
+//    private final AssignmentService assignmentService;
 
 //    Get Student Profile
     @GetMapping("/{studentId}")
@@ -63,11 +63,11 @@ public class StudentController {
     }
 
 //    View my assignment
-    @GetMapping("/{studentId}/assignments")
-    public ResponseEntity<List<Assignment>> viewStudentAssignments(@PathVariable Long studentId){
-            List<Assignment> assignmentList = assignmentService.viewStudentAssignments(studentId);
-            return ResponseEntity.ok(assignmentList);
-    }
+//    @GetMapping("/{studentId}/assignments")
+//    public ResponseEntity<List<Assignment>> viewStudentAssignments(@PathVariable Long studentId){
+//            List<Assignment> assignmentList = assignmentService.viewStudentAssignments(studentId);
+//            return ResponseEntity.ok(assignmentList);
+//    }
 
 //    Submit Assignment
     @PostMapping("/{studentId}/assignments/{assignmentId}/submissions")

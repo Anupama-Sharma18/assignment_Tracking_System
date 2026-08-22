@@ -33,6 +33,7 @@ public class Assignment {
 
     private Long trainerId;
 
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface AssignmentService {
 
-    List<Assignment> viewStudentAssignments(Long studentId);
+//    List<Assignment> viewStudentAssignments(Long studentId);
 }

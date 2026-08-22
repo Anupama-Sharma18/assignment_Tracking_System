@@ -1,18 +1,14 @@
 package com.example.assignment_Tracking_System.service.impl;
 
 import com.example.assignment_Tracking_System.dto.SubmissionRequest;
-import com.example.assignment_Tracking_System.dto.UserRequest;
 import com.example.assignment_Tracking_System.entity.Submission;
-import com.example.assignment_Tracking_System.entity.User;
 import com.example.assignment_Tracking_System.exception.ResourceNotFoundException;
 import com.example.assignment_Tracking_System.repository.SubmissionRepository;
-import com.example.assignment_Tracking_System.repository.UserRepository;
-import com.example.assignment_Tracking_System.service.StudentService;
+
 import com.example.assignment_Tracking_System.service.SubmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.time.LocalDateTime;
 import java.util.List;

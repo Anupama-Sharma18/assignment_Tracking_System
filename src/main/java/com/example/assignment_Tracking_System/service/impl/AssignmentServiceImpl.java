@@ -11,17 +11,17 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AssignmentServiceImpl implements AssignmentService {
+public class AssignmentServiceImpl{
 
-    private final AssignmentRepository assignmentRepository;
-
-    @Override
-    public List<Assignment> viewStudentAssignments(Long studentId){
-
-        List<Assignment> assignmentList = assignmentRepository.findByStudentId(studentId);
-        if (assignmentList.isEmpty()){
-            throw new ResourceNotFoundException("Student with id "+ studentId + " does not have any assignment yet!");
-        }
-        return assignmentList;
-    }
+//    private final AssignmentRepository assignmentRepository;
+//
+//    @Override
+//    public List<Assignment> viewStudentAssignments(Long studentId){
+//
+//        List<Assignment> assignmentList = assignmentRepository.findByStudentId(studentId);
+//        if (assignmentList.isEmpty()){
+//            throw new ResourceNotFoundException("Student with id "+ studentId + " does not have any assignment yet!");
+//        }
+//        return assignmentList;
+//    }
 }
