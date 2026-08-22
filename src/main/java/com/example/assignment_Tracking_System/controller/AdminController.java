@@ -1,4 +1,4 @@
 package com.example.assignment_Tracking_System.controller;
 
-public class AdminControlle {
+public class AdminController {
 }
