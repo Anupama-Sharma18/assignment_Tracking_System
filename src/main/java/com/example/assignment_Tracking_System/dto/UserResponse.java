@@ -1,6 +1,7 @@
 package com.example.assignment_Tracking_System.dto;
 
-import com.example.assignment_Tracking_System.entity.User;
+
+import com.example.assignment_Tracking_System.entity.User.Role;
 import lombok.*;
 
 @Getter
@@ -18,7 +19,7 @@ public class UserResponse {
 
     private String phone;
 
-    private User.Role role;
+    private Role role;
 
     private boolean active;
 }
