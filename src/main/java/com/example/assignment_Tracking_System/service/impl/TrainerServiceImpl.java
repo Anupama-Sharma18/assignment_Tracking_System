@@ -32,17 +32,39 @@ public class TrainerServiceImpl implements TrainerService {
     private final AssignmentStudentRepository assignmentStudentRepository;
     private final SubmissionRepository submissionRepository;
 
-
-
     // CREATE ASSIGNMENT
-
 
     @Override
     public AssignmentResponse createAssignment(
             Long trainerId,
             AssignmentRequest request) {
 
+        // Validate trainer
         User trainer = getTrainer(trainerId);
+
+        // Validate due date
+        if (request.getDueDate() == null) {
+            throw new InvalidAssignmentException(
+                    "Due date is required"
+            );
+        }
+
+        if (request.getDueDate()
+                .isBefore(LocalDate.now())) {
+
+            throw new InvalidAssignmentException(
+                    "Due date cannot be in the past"
+            );
+        }
+
+        // Validate max marks
+        if (request.getMaxMarks() == null
+                || request.getMaxMarks() <= 0) {
+
+            throw new InvalidAssignmentException(
+                    "Max marks must be greater than 0"
+            );
+        }
 
         Assignment assignment = Assignment.builder()
                 .title(request.getTitle())
@@ -59,7 +81,9 @@ public class TrainerServiceImpl implements TrainerService {
         Assignment savedAssignment =
                 assignmentRepository.save(assignment);
 
-        return convertToAssignmentResponse(savedAssignment);
+        return convertToAssignmentResponse(
+                savedAssignment
+        );
     }
 
 
@@ -141,6 +165,28 @@ public class TrainerServiceImpl implements TrainerService {
 
             throw new InvalidAssignmentException(
                     "Closed assignment cannot be updated"
+            );
+        }
+
+        if (request.getDueDate() == null) {
+            throw new InvalidAssignmentException(
+                    "Due date is required"
+            );
+        }
+
+        if (request.getDueDate()
+                .isBefore(LocalDate.now())) {
+
+            throw new InvalidAssignmentException(
+                    "Due date cannot be in the past"
+            );
+        }
+
+        if (request.getMaxMarks() == null
+                || request.getMaxMarks() <= 0) {
+
+            throw new InvalidAssignmentException(
+                    "Max marks must be greater than 0"
             );
         }
 
@@ -444,6 +490,7 @@ public class TrainerServiceImpl implements TrainerService {
                                 )
                         );
 
+        // Cannot evaluate twice
         if (submission.getStatus()
                 == Submission.Status.EVALUATED) {
 
@@ -452,6 +499,23 @@ public class TrainerServiceImpl implements TrainerService {
             );
         }
 
+        // Marks required
+        if (request.getMarks() == null) {
+
+            throw new InvalidSubmissionException(
+                    "Marks are required"
+            );
+        }
+
+        // Negative marks
+        if (request.getMarks() < 0) {
+
+            throw new InvalidSubmissionException(
+                    "Marks cannot be negative"
+            );
+        }
+
+        // Marks cannot exceed max marks
         if (request.getMarks()
                 > assignment.getMaxMarks()) {
 
@@ -461,6 +525,7 @@ public class TrainerServiceImpl implements TrainerService {
             );
         }
 
+        // Student must be assigned
         boolean studentAssigned =
                 assignmentStudentRepository
                         .existsByAssignmentIdAndStudentId(
@@ -475,9 +540,7 @@ public class TrainerServiceImpl implements TrainerService {
             );
         }
 
-        submission.setMarks(
-                request.getMarks()
-        );
+        submission.setMarks(request.getMarks());
 
         submission.setFeedback(
                 request.getFeedback()

@@ -1,10 +1,7 @@
 package com.example.assignment_Tracking_System.controller;
 
 
-import com.example.assignment_Tracking_System.dto.AssignmentResponse;
-import com.example.assignment_Tracking_System.dto.SubmissionRequest;
-import com.example.assignment_Tracking_System.dto.UserRequest;
-import com.example.assignment_Tracking_System.dto.UserResponse;
+import com.example.assignment_Tracking_System.dto.*;
 import com.example.assignment_Tracking_System.entity.Assignment;
 import com.example.assignment_Tracking_System.entity.Submission;
 import com.example.assignment_Tracking_System.entity.User;
@@ -56,15 +53,24 @@ public ResponseEntity<UserResponse> getStudent(
 
 
 //    Submit Assignment
-    @PostMapping("/{studentId}/assignments/{assignmentId}/submissions")
-    public ResponseEntity<Submission> submitAssignment(
-            @PathVariable Long studentId,
-            @PathVariable Long assignmentId,
-            @RequestBody SubmissionRequest submissionRequest){
+// Submit Assignment
+@PostMapping("/{studentId}/assignments/{assignmentId}/submissions")
+public ResponseEntity<SubmissionResponse> submitAssignment(
+        @PathVariable Long studentId,
+        @PathVariable Long assignmentId,
+        @RequestBody @Valid SubmissionRequest submissionRequest) {
 
-        Submission submission = submissionService.submitAssignment(studentId, assignmentId, submissionRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(submission);
-    }
+    SubmissionResponse submission =
+            submissionService.submitAssignment(
+                    studentId,
+                    assignmentId,
+                    submissionRequest
+            );
+
+    return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(submission);
+}
 
 //    View My Submission
 @GetMapping("/{studentId}/assignments")
@@ -79,30 +85,64 @@ viewStudentAssignments(
 }
 
 //    Update Submission
-    @PutMapping("/{studentId}/assignments/{assignmentId}/submission")
-    public ResponseEntity<Submission> updateSubmission(@PathVariable Long studentId, @PathVariable Long assignmentId,@RequestBody @Valid SubmissionRequest submissionRequest){
-            Submission submission = submissionService.updateSubmission(studentId,assignmentId,submissionRequest);
-            return ResponseEntity.ok(submission);
-    }
+@PutMapping("/{studentId}/assignments/{assignmentId}/submission")
+public ResponseEntity<SubmissionResponse> updateSubmission(
+        @PathVariable Long studentId,
+        @PathVariable Long assignmentId,
+        @RequestBody @Valid SubmissionRequest submissionRequest) {
+
+    SubmissionResponse submission =
+            submissionService.updateSubmission(
+                    studentId,
+                    assignmentId,
+                    submissionRequest
+            );
+
+    return ResponseEntity.ok(submission);
+}
+
+//    view submission
+@GetMapping("/{studentId}/assignments/{assignmentId}/submission")
+public ResponseEntity<SubmissionResponse> viewSubmission(
+        @PathVariable Long studentId,
+        @PathVariable Long assignmentId) {
+
+    SubmissionResponse submission =
+            submissionService.viewSubmission(
+                    studentId,
+                    assignmentId
+            );
+
+    return ResponseEntity.ok(submission);
+}
 
 //    View all my Submission
-    @GetMapping("/{studentId}/submissions")
-    public ResponseEntity<List<Submission>> viewAllSubmissionByStudentId(@PathVariable Long studentId){
-            List<Submission> submissionList = submissionService.viewAllSubmissionByStudentId(studentId);
-            return ResponseEntity.ok(submissionList);
-    }
+@GetMapping("/{studentId}/submissions")
+public ResponseEntity<List<SubmissionResponse>>
+viewAllSubmissionByStudentId(
+        @PathVariable Long studentId) {
+
+    List<SubmissionResponse> submissions =
+            submissionService.viewAllSubmissionByStudentId(
+                    studentId
+            );
+
+    return ResponseEntity.ok(submissions);
+}
 
 //    View Result for a particular assignment
-    @GetMapping("/{studentId}/submissions/{submissionId}/result")
-    public ResponseEntity<Submission> viewResult(@PathVariable Long studentId, @PathVariable Long submissionId){
-        Submission result = submissionService.viewResult(studentId,submissionId);
-        return ResponseEntity.ok(result);
+@GetMapping("/{studentId}/submissions/{submissionId}/result")
+public ResponseEntity<SubmissionResponse> viewResult(
+        @PathVariable Long studentId,
+        @PathVariable Long submissionId) {
 
-    }
+    SubmissionResponse result =
+            submissionService.viewResult(
+                    studentId,
+                    submissionId
+            );
 
-
-
-
-
+    return ResponseEntity.ok(result);
+}
 
 }

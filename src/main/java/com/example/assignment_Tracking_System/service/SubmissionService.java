@@ -1,20 +1,37 @@
 package com.example.assignment_Tracking_System.service;
 
 import com.example.assignment_Tracking_System.dto.SubmissionRequest;
+import com.example.assignment_Tracking_System.dto.SubmissionResponse;
 import com.example.assignment_Tracking_System.entity.Submission;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
 public interface SubmissionService {
-    public Submission submitAssignment(Long studentId, Long assignmentId, SubmissionRequest submissionRequest);
 
-    public Submission viewSubmission(Long studentId, Long assignmentId);
+    SubmissionResponse submitAssignment(
+            Long studentId,
+            Long assignmentId,
+            SubmissionRequest submissionRequest
+    );
 
-    Submission updateSubmission(Long studentId, Long assignmentId, SubmissionRequest submissionRequest);
+    SubmissionResponse viewSubmission(
+            Long studentId,
+            Long assignmentId
+    );
 
-    List<Submission> viewAllSubmissionByStudentId(Long studentId);
+    SubmissionResponse updateSubmission(
+            Long studentId,
+            Long assignmentId,
+            SubmissionRequest submissionRequest
+    );
 
-    Submission viewResult(Long studentId, Long submissionId);
+    List<SubmissionResponse> viewAllSubmissionByStudentId(
+            Long studentId
+    );
 
+    SubmissionResponse viewResult(
+            Long studentId,
+            Long submissionId
+    );
 }

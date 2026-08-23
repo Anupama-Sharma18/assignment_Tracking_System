@@ -167,10 +167,7 @@ public class AdminServiceImpl implements AdminService {
         userRepository.save(trainer);
     }
 
-
-
     // CREATE ASSIGNMENT
-
 
     @Override
     public AssignmentResponse createAssignment(
@@ -182,6 +179,31 @@ public class AdminServiceImpl implements AdminService {
             );
         }
 
+        // Check due date
+        if (request.getDueDate() == null) {
+            throw new InvalidAssignmentException(
+                    "Due date is required"
+            );
+        }
+
+        if (request.getDueDate()
+                .isBefore(LocalDate.now())) {
+
+            throw new InvalidAssignmentException(
+                    "Due date cannot be in the past"
+            );
+        }
+
+        // Check max marks
+        if (request.getMaxMarks() == null
+                || request.getMaxMarks() <= 0) {
+
+            throw new InvalidAssignmentException(
+                    "Max marks must be greater than 0"
+            );
+        }
+
+        // Check trainer
         User trainer =
                 userRepository.findById(
                         request.getTrainerId()
@@ -279,6 +301,27 @@ public class AdminServiceImpl implements AdminService {
 
             throw new InvalidAssignmentException(
                     "Closed assignment cannot be updated"
+            );
+        }
+        if (request.getDueDate() == null) {
+            throw new InvalidAssignmentException(
+                    "Due date is required"
+            );
+        }
+
+        if (request.getDueDate()
+                .isBefore(LocalDate.now())) {
+
+            throw new InvalidAssignmentException(
+                    "Due date cannot be in the past"
+            );
+        }
+
+        if (request.getMaxMarks() == null
+                || request.getMaxMarks() <= 0) {
+
+            throw new InvalidAssignmentException(
+                    "Max marks must be greater than 0"
             );
         }
 
