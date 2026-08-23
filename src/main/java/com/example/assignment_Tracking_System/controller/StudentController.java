@@ -1,6 +1,7 @@
 package com.example.assignment_Tracking_System.controller;
 
 
+import com.example.assignment_Tracking_System.dto.AssignmentResponse;
 import com.example.assignment_Tracking_System.dto.SubmissionRequest;
 import com.example.assignment_Tracking_System.dto.UserRequest;
 import com.example.assignment_Tracking_System.dto.UserResponse;
@@ -26,7 +27,7 @@ public class StudentController {
 
 
     private final SubmissionService submissionService;
-    private final AdminService adminService;
+    private final AssignmentService assignmentService;
     private final StudentService studentService;
 
 //    Get Student Profile
@@ -66,11 +67,16 @@ public ResponseEntity<UserResponse> getStudent(
     }
 
 //    View My Submission
-    @GetMapping("/{studentId}/assignments/{assignmentId}/submission")
-    public ResponseEntity<Submission> viewSubmission(@PathVariable Long studentId, @PathVariable Long assignmentId){
-        Submission submission = submissionService.viewSubmission(studentId, assignmentId);
-        return ResponseEntity.ok(submission);
-    }
+@GetMapping("/{studentId}/assignments")
+public ResponseEntity<List<AssignmentResponse>>
+viewStudentAssignments(
+        @PathVariable Long studentId) {
+
+    List<AssignmentResponse> assignmentList =
+            assignmentService.getStudentAssignments(studentId);
+
+    return ResponseEntity.ok(assignmentList);
+}
 
 //    Update Submission
     @PutMapping("/{studentId}/assignments/{assignmentId}/submission")
