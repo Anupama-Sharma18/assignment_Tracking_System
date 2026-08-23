@@ -19,4 +19,6 @@ public interface AssignmentStudentRepository
     );
 
     void deleteByAssignmentId(Long assignmentId);
+
+
 }

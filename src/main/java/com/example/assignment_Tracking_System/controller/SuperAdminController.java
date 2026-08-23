@@ -1,7 +1,8 @@
 package com.example.assignment_Tracking_System.controller;
 
-import com.example.assignment_Tracking_System.dto.UserRequest;
-import com.example.assignment_Tracking_System.dto.UserResponse;
+import com.example.assignment_Tracking_System.dto.*;
+import com.example.assignment_Tracking_System.entity.Assignment;
+import com.example.assignment_Tracking_System.entity.Submission;
 import com.example.assignment_Tracking_System.entity.User;
 import com.example.assignment_Tracking_System.service.*;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ public class SuperAdminController {
     private final StudentService studentService;
     private final TrainerService trainerService;
     private final SuperAdminService superAdminService;
+    private final AdminService adminService;
 
     @PostMapping("/admins")
     public ResponseEntity<UserResponse> createAdmin(@RequestBody @Valid UserRequest userRequest){
@@ -56,9 +58,38 @@ public class SuperAdminController {
 //    get all trainers
     @GetMapping("/trainers")
     public ResponseEntity<List<UserResponse>> getAllTrainers(){
-        List<UserResponse> userResponseList = superAdminService.getAllAdmins();
+        List<UserResponse> userResponseList = adminService.getAllTrainers();
         return ResponseEntity.ok(userResponseList);
     }
+
+    //    get all Assignments
+    @GetMapping("/assignments")
+    public ResponseEntity<List<AssignmentResponse>> getAllAssignments(){
+        List<AssignmentResponse> assignmentList = adminService.getAllAssignments();
+        return ResponseEntity.ok(assignmentList);
+    }
+
+    //    get all students
+    @GetMapping("/students")
+    public ResponseEntity<List<UserResponse>> getAllStudents(){
+        List<UserResponse> userResponseList = superAdminService.getAllStudents();
+        return ResponseEntity.ok(userResponseList);
+    }
+//get all submissions
+    @GetMapping("/submissions")
+    public ResponseEntity<List<SubmissionResponse>> getAllSubmissions(){
+        List<SubmissionResponse> submissionList = superAdminService.getAllSubmissions();
+        return ResponseEntity.ok(submissionList);
+    }
+// dashboard statistics
+@GetMapping("/dashboard")
+public DashboardResponse getDashboardStatistics() {
+    return superAdminService.getDashboardStatistics();
+}
+
+
+
+
 
 
 }
