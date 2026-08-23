@@ -2,6 +2,7 @@ package com.example.assignment_Tracking_System.repository;
 
 
 import com.example.assignment_Tracking_System.entity.Assignment;
+import com.example.assignment_Tracking_System.entity.AssignmentStudent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface AssignmentRepository
             Long assignmentId,
             Long trainerId
     );
+
 }
