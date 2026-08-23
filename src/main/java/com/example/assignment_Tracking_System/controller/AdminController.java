@@ -8,6 +8,8 @@ import com.example.assignment_Tracking_System.dto.SubmissionResponse;
 import com.example.assignment_Tracking_System.dto.UserRequest;
 import com.example.assignment_Tracking_System.dto.UserResponse;
 import com.example.assignment_Tracking_System.service.AdminService;
+import com.example.assignment_Tracking_System.service.StudentService;
+import com.example.assignment_Tracking_System.service.SuperAdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -196,5 +198,68 @@ public class AdminController {
                         assignmentId
                 )
         );
+    }
+
+    // =========================================================
+// STUDENT MANAGEMENT
+// =========================================================
+
+    // 13. Create Student
+    @PostMapping("/students")
+    public ResponseEntity<UserResponse> createStudent(
+            @Valid @RequestBody UserRequest request) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(adminService.createStudent(request));
+    }
+
+
+    // 14. Get All Students
+    @GetMapping("/students")
+    public ResponseEntity<List<UserResponse>> getAllStudents() {
+
+        return ResponseEntity.ok(
+                adminService.getAllStudents()
+        );
+    }
+
+
+    // 15. Get Student
+    @GetMapping("/students/{studentId}")
+    public ResponseEntity<UserResponse> getStudent(
+            @PathVariable Long studentId) {
+
+        return ResponseEntity.ok(
+                adminService.getStudent(studentId)
+        );
+    }
+
+
+    // 16. Update Student
+    @PutMapping("/students/{studentId}")
+    public ResponseEntity<UserResponse> updateStudent(
+            @PathVariable Long studentId,
+            @Valid @RequestBody UserRequest request) {
+
+        return ResponseEntity.ok(
+                adminService.updateStudent(
+                        studentId,
+                        request
+                )
+        );
+    }
+
+
+    // 17. Delete Student
+    @DeleteMapping("/students/{studentId}")
+    public ResponseEntity<Void> deleteStudent(
+            @PathVariable Long studentId) {
+
+        adminService.deleteStudent(studentId);
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }

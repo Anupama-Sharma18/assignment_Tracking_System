@@ -488,7 +488,140 @@ public class AdminServiceImpl implements AdminService {
             );
         }
     }
+//    Students management
+@Override
+public UserResponse createStudent(UserRequest request) {
 
+    if (userRepository.existsByEmail(request.getEmail())) {
+        throw new DuplicateResourceException(
+                "Email already exists: "
+                        + request.getEmail()
+        );
+    }
+
+    User student = User.builder()
+            .name(request.getName())
+            .email(request.getEmail())
+            .phone(request.getPhone())
+            .role(User.Role.STUDENT)
+            .active(true)
+            .createdAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
+            .build();
+
+    User savedStudent = userRepository.save(student);
+
+    return convertToUserResponse(savedStudent);
+}
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserResponse> getAllStudents() {
+
+        return userRepository
+                .findByRole(User.Role.STUDENT)
+                .stream()
+                .map(this::convertToUserResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponse getStudent(Long studentId) {
+
+        User student =
+                userRepository.findById(studentId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Student with id "
+                                                + studentId
+                                                + " not found"
+                                )
+                        );
+
+        if (student.getRole() != User.Role.STUDENT) {
+            throw new ResourceNotFoundException(
+                    "Student with id "
+                            + studentId
+                            + " not found"
+            );
+        }
+
+        return convertToUserResponse(student);
+    }
+
+    @Override
+    public UserResponse updateStudent(
+            Long studentId,
+            UserRequest request) {
+
+        User student =
+                userRepository.findById(studentId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Student with id "
+                                                + studentId
+                                                + " not found"
+                                )
+                        );
+
+        if (student.getRole() != User.Role.STUDENT) {
+            throw new ResourceNotFoundException(
+                    "Student with id "
+                            + studentId
+                            + " not found"
+            );
+        }
+
+        userRepository.findByEmail(request.getEmail())
+                .ifPresent(existingUser -> {
+
+                    if (!existingUser.getId()
+                            .equals(studentId)) {
+
+                        throw new DuplicateResourceException(
+                                "Email already exists: "
+                                        + request.getEmail()
+                        );
+                    }
+                });
+
+        student.setName(request.getName());
+        student.setEmail(request.getEmail());
+        student.setPhone(request.getPhone());
+        student.setUpdatedAt(LocalDateTime.now());
+
+        User updatedStudent =
+                userRepository.save(student);
+
+        return convertToUserResponse(updatedStudent);
+    }
+    @Override
+    public void deleteStudent(Long studentId) {
+
+        User student =
+                userRepository.findById(studentId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Student with id "
+                                                + studentId
+                                                + " not found"
+                                )
+                        );
+
+        if (student.getRole() != User.Role.STUDENT) {
+            throw new ResourceNotFoundException(
+                    "Student with id "
+                            + studentId
+                            + " not found"
+            );
+        }
+
+        student.setActive(false);
+        student.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(student);
+    }
 
 
     // RESPONSE CONVERTERS

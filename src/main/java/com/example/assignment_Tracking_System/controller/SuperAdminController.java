@@ -18,10 +18,7 @@ import java.util.List;
 @RequestMapping("/api/super-admin")
 public class SuperAdminController {
 
-    private final UserService userService;
-    private final SubmissionService submissionService;
-    private final StudentService studentService;
-    private final TrainerService trainerService;
+
     private final SuperAdminService superAdminService;
     private final AdminService adminService;
 
