@@ -206,8 +206,7 @@ public class AdminController {
 
     // 13. Create Student
     @PostMapping("/students")
-    public ResponseEntity<UserResponse> createStudent(
-            @Valid @RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> createStudent(@Valid @RequestBody UserRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

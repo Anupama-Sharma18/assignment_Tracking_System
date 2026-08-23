@@ -27,48 +27,32 @@ public class StudentController {
 
     private final SubmissionService submissionService;
     private final AdminService adminService;
+    private final StudentService studentService;
 
 //    Get Student Profile
-    @GetMapping("/{studentId}")
-    public ResponseEntity<UserResponse> getStudent(@PathVariable Long studentId){
-        UserResponse student = adminService.getStudent(studentId);
-        UserResponse result= UserResponse.builder()
-                .id(student.getId())
-                .name(student.getName())
-                .email(student.getEmail())
-                .phone(student.getPhone())
-                .role(student.getRole())
-                .active(student.isActive())
-                .build();
+@GetMapping("/{studentId}")
+public ResponseEntity<UserResponse> getStudent(
+        @PathVariable Long studentId) {
 
-        return ResponseEntity.ok(result);
-
-    }
+    return ResponseEntity.ok(
+            studentService.getStudent(studentId)
+    );
+}
 
     //    Update Student Profile
     @PutMapping("/{studentId}")
-    public ResponseEntity<UserResponse> updateStudent(@PathVariable Long studentId, @RequestBody @Valid UserRequest user){
+    public ResponseEntity<UserResponse> updateStudent(
+            @PathVariable Long studentId,
+            @Valid @RequestBody UserRequest user) {
 
-        UserResponse student = adminService.updateStudent(studentId, user);
-
-        UserResponse result = UserResponse.builder()
-                .id(student.getId())
-                .name(student.getName())
-                .email(student.getEmail())
-                .phone(student.getPhone())
-                .role(student.getRole())
-                .active(student.isActive())
-                .build();
-
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(
+                studentService.updateStudent(
+                        studentId,
+                        user
+                )
+        );
     }
 
-//    View my assignment
-//    @GetMapping("/{studentId}/assignments")
-//    public ResponseEntity<List<Assignment>> viewStudentAssignments(@PathVariable Long studentId){
-//            List<Assignment> assignmentList = assignmentService.viewStudentAssignments(studentId);
-//            return ResponseEntity.ok(assignmentList);
-//    }
 
 //    Submit Assignment
     @PostMapping("/{studentId}/assignments/{assignmentId}/submissions")
