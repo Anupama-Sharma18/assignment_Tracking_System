@@ -20,5 +20,7 @@ public interface SubmissionRepository extends JpaRepository<Submission, Long> {
 
     void deleteByAssignmentId(Long assignmentId);
 
+    long countByStatus(Submission.Status status);
+
 
 }

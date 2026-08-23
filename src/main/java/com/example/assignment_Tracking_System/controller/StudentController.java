@@ -7,6 +7,7 @@ import com.example.assignment_Tracking_System.dto.UserResponse;
 import com.example.assignment_Tracking_System.entity.Assignment;
 import com.example.assignment_Tracking_System.entity.Submission;
 import com.example.assignment_Tracking_System.entity.User;
+import com.example.assignment_Tracking_System.service.AdminService;
 import com.example.assignment_Tracking_System.service.AssignmentService;
 import com.example.assignment_Tracking_System.service.StudentService;
 import com.example.assignment_Tracking_System.service.SubmissionService;
@@ -23,14 +24,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentService studentService;
+
     private final SubmissionService submissionService;
-//    private final AssignmentService assignmentService;
+    private final AdminService adminService;
 
 //    Get Student Profile
     @GetMapping("/{studentId}")
     public ResponseEntity<UserResponse> getStudent(@PathVariable Long studentId){
-        User student = studentService.getStudent(studentId);
+        UserResponse student = adminService.getStudent(studentId);
         UserResponse result= UserResponse.builder()
                 .id(student.getId())
                 .name(student.getName())
@@ -48,7 +49,7 @@ public class StudentController {
     @PutMapping("/{studentId}")
     public ResponseEntity<UserResponse> updateStudent(@PathVariable Long studentId, @RequestBody @Valid UserRequest user){
 
-        User student = studentService.updateStudent(studentId, user);
+        UserResponse student = adminService.updateStudent(studentId, user);
 
         UserResponse result = UserResponse.builder()
                 .id(student.getId())

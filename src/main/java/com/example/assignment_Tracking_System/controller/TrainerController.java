@@ -19,7 +19,9 @@ public class TrainerController {
     private final TrainerService trainerService;
 
 
-    // CREATE
+    // =========================================================
+    // CREATE ASSIGNMENT
+    // =========================================================
 
     @PostMapping("/assignments")
     public ResponseEntity<AssignmentResponse> createAssignment(
@@ -38,8 +40,9 @@ public class TrainerController {
     }
 
 
+    // =========================================================
     // GET TRAINER ASSIGNMENTS
-
+    // =========================================================
 
     @GetMapping("/assignments")
     public ResponseEntity<List<AssignmentResponse>> getAssignments(
@@ -53,7 +56,9 @@ public class TrainerController {
     }
 
 
+    // =========================================================
     // GET ASSIGNMENT
+    // =========================================================
 
     @GetMapping("/assignments/{assignmentId}")
     public ResponseEntity<AssignmentResponse> getAssignment(
@@ -69,7 +74,9 @@ public class TrainerController {
     }
 
 
+    // =========================================================
     // UPDATE ASSIGNMENT
+    // =========================================================
 
     @PutMapping("/assignments/{assignmentId}")
     public ResponseEntity<AssignmentResponse> updateAssignment(
@@ -87,8 +94,9 @@ public class TrainerController {
     }
 
 
-
+    // =========================================================
     // DELETE ASSIGNMENT
+    // =========================================================
 
     @DeleteMapping("/assignments/{assignmentId}")
     public ResponseEntity<Void> deleteAssignment(
@@ -104,8 +112,9 @@ public class TrainerController {
     }
 
 
-
+    // =========================================================
     // VIEW STUDENTS
+    // =========================================================
 
     @GetMapping("/students")
     public ResponseEntity<List<UserResponse>> getStudents(
@@ -119,7 +128,9 @@ public class TrainerController {
     }
 
 
+    // =========================================================
     // ASSIGN ASSIGNMENT TO STUDENTS
+    // =========================================================
 
     @PostMapping("/assignments/{assignmentId}/students")
     public ResponseEntity<Void> assignStudents(
@@ -137,8 +148,9 @@ public class TrainerController {
     }
 
 
+    // =========================================================
     // VIEW ASSIGNED STUDENTS
-
+    // =========================================================
 
     @GetMapping("/assignments/{assignmentId}/students")
     public ResponseEntity<List<UserResponse>> getAssignedStudents(
@@ -154,9 +166,9 @@ public class TrainerController {
     }
 
 
-
+    // =========================================================
     // VIEW ALL SUBMISSIONS
-
+    // =========================================================
 
     @GetMapping("/submissions")
     public ResponseEntity<List<SubmissionResponse>> getSubmissions(
@@ -170,9 +182,9 @@ public class TrainerController {
     }
 
 
-
+    // =========================================================
     // VIEW ASSIGNMENT SUBMISSIONS
-
+    // =========================================================
 
     @GetMapping(
             "/assignments/{assignmentId}/submissions"
@@ -191,8 +203,9 @@ public class TrainerController {
     }
 
 
-
+    // =========================================================
     // EVALUATE SUBMISSION
+    // =========================================================
 
     @PutMapping(
             "/submissions/{submissionId}/evaluate"

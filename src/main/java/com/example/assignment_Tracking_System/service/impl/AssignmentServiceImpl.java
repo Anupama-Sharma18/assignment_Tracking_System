@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class AssignmentServiceImpl{
+//@Service
+//@RequiredArgsConstructor
+public class AssignmentServiceImpl implements AssignmentService{
 
 //    private final AssignmentRepository assignmentRepository;
 //
