@@ -73,7 +73,7 @@ public class TrainerServiceImpl implements TrainerService {
                 .dueDate(request.getDueDate())
                 .maxMarks(request.getMaxMarks())
                 .status(Assignment.Status.CREATED)
-                .trainerId(trainer.getId())
+                .trainer(trainer)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -99,7 +99,7 @@ public class TrainerServiceImpl implements TrainerService {
         getTrainer(trainerId);
 
         return assignmentRepository
-                .findByTrainerIdOrderByDueDateAsc(trainerId)
+                .findByTrainer_IdOrderByDueDateAsc(trainerId)
                 .stream()
                 .map(this::convertToAssignmentResponse)
                 .toList();
@@ -120,7 +120,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         Assignment assignment =
                 assignmentRepository
-                        .findByIdAndTrainerId(
+                        .findByIdAndTrainer_Id(
                                 assignmentId,
                                 trainerId
                         )
@@ -148,7 +148,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         Assignment assignment =
                 assignmentRepository
-                        .findByIdAndTrainerId(
+                        .findByIdAndTrainer_Id(
                                 assignmentId,
                                 trainerId
                         )
@@ -213,7 +213,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         Assignment assignment =
                 assignmentRepository
-                        .findByIdAndTrainerId(
+                        .findByIdAndTrainer_Id(
                                 assignmentId,
                                 trainerId
                         )
@@ -226,10 +226,10 @@ public class TrainerServiceImpl implements TrainerService {
                         );
 
         submissionRepository
-                .deleteByAssignmentId(assignmentId);
+                .deleteByAssignment_Id(assignmentId);
 
         assignmentStudentRepository
-                .deleteByAssignmentId(assignmentId);
+                .deleteByAssignment_Id(assignmentId);
 
         assignmentRepository.delete(assignment);
     }
@@ -266,7 +266,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         Assignment assignment =
                 assignmentRepository
-                        .findByIdAndTrainerId(
+                        .findByIdAndTrainer_Id(
                                 assignmentId,
                                 trainerId
                         )
@@ -319,7 +319,7 @@ public class TrainerServiceImpl implements TrainerService {
 
             boolean alreadyAssigned =
                     assignmentStudentRepository
-                            .existsByAssignmentIdAndStudentId(
+                            .existsByAssignment_IdAndStudent_Id(
                                     assignmentId,
                                     studentId
                             );
@@ -328,8 +328,8 @@ public class TrainerServiceImpl implements TrainerService {
 
                 AssignmentStudent assignmentStudent =
                         AssignmentStudent.builder()
-                                .assignmentId(assignmentId)
-                                .studentId(studentId)
+                                .assignment(assignment)
+                                .student(student)
                                 .assignedAt(
                                         LocalDateTime.now()
                                 )
@@ -363,7 +363,7 @@ public class TrainerServiceImpl implements TrainerService {
             Long assignmentId) {
 
         assignmentRepository
-                .findByIdAndTrainerId(
+                .findByIdAndTrainer_Id(
                         assignmentId,
                         trainerId
                 )
@@ -376,11 +376,11 @@ public class TrainerServiceImpl implements TrainerService {
                 );
 
         return assignmentStudentRepository
-                .findByAssignmentId(assignmentId)
+                .findByAssignment_Id(assignmentId)
                 .stream()
-                .map(AssignmentStudent::getStudentId)
+                .map(AssignmentStudent::getStudent)
                 .map(studentId ->
-                        userRepository.findById(studentId)
+                        userRepository.findById(studentId.getId())
                                 .orElseThrow(() ->
                                         new ResourceNotFoundException(
                                                 "Student with id "
@@ -407,7 +407,7 @@ public class TrainerServiceImpl implements TrainerService {
 
         List<Long> assignmentIds =
                 assignmentRepository
-                        .findByTrainerIdOrderByDueDateAsc(
+                        .findByTrainer_IdOrderByDueDateAsc(
                                 trainerId
                         )
                         .stream()
@@ -419,7 +419,7 @@ public class TrainerServiceImpl implements TrainerService {
         }
 
         return submissionRepository
-                .findByAssignmentIdIn(assignmentIds)
+                .findByAssignment_IdIn(assignmentIds)
                 .stream()
                 .map(this::convertToSubmissionResponse)
                 .toList();
@@ -437,7 +437,7 @@ public class TrainerServiceImpl implements TrainerService {
             Long assignmentId) {
 
         assignmentRepository
-                .findByIdAndTrainerId(
+                .findByIdAndTrainer_Id(
                         assignmentId,
                         trainerId
                 )
@@ -450,7 +450,7 @@ public class TrainerServiceImpl implements TrainerService {
                 );
 
         return submissionRepository
-                .findByAssignmentId(assignmentId)
+                .findByAssignment_Id(assignmentId)
                 .stream()
                 .map(this::convertToSubmissionResponse)
                 .toList();
@@ -479,8 +479,8 @@ public class TrainerServiceImpl implements TrainerService {
 
         Assignment assignment =
                 assignmentRepository
-                        .findByIdAndTrainerId(
-                                submission.getAssignmentId(),
+                        .findByIdAndTrainer_Id(
+                                submission.getAssignment().getId(),
                                 trainerId
                         )
                         .orElseThrow(() ->
@@ -528,9 +528,9 @@ public class TrainerServiceImpl implements TrainerService {
         // Student must be assigned
         boolean studentAssigned =
                 assignmentStudentRepository
-                        .existsByAssignmentIdAndStudentId(
+                        .existsByAssignment_IdAndStudent_Id(
                                 assignment.getId(),
-                                submission.getStudentId()
+                                submission.getStudent().getId()
                         );
 
         if (!studentAssigned) {
@@ -615,7 +615,7 @@ public class TrainerServiceImpl implements TrainerService {
                 .dueDate(assignment.getDueDate())
                 .maxMarks(assignment.getMaxMarks())
                 .status(assignment.getStatus())
-                .trainerId(assignment.getTrainerId())
+                .trainerId(assignment.getTrainer().getId())
                 .build();
     }
 
@@ -640,10 +640,10 @@ public class TrainerServiceImpl implements TrainerService {
         return SubmissionResponse.builder()
                 .id(submission.getId())
                 .assignmentId(
-                        submission.getAssignmentId()
+                        submission.getAssignment().getId()
                 )
                 .studentId(
-                        submission.getStudentId()
+                        submission.getStudent().getId()
                 )
                 .submissionText(
                         submission.getSubmissionText()

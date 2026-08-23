@@ -12,10 +12,10 @@ import lombok.*;
 @Builder
 public class EvaluationRequest {
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = "Marks are required")
+    @Min(value = 0, message = "Marks cannot be negative")
     private Integer marks;
 
-    @NotBlank
+    @NotBlank(message = "Feedback is required")
     private String feedback;
 }

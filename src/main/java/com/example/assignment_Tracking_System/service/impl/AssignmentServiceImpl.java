@@ -44,7 +44,7 @@ public class AssignmentServiceImpl implements AssignmentService{
         // Get assignments assigned to student
         List<AssignmentStudent> assignedAssignments =
                 assignmentStudentRepository
-                        .findByStudentId(studentId);
+                        .findByStudent_Id(studentId);
 
         // If no assignment is assigned
         if (assignedAssignments.isEmpty()) {
@@ -57,12 +57,12 @@ public class AssignmentServiceImpl implements AssignmentService{
                 .map(assignmentStudent ->
                         assignmentRepository
                                 .findById(
-                                        assignmentStudent.getAssignmentId()
+                                        assignmentStudent.getAssignment().getId()
                                 )
                                 .orElseThrow(() ->
                                         new ResourceNotFoundException(
                                                 "Assignment with id "
-                                                        + assignmentStudent.getAssignmentId()
+                                                        + assignmentStudent.getAssignment().getId()
                                                         + " not found"
                                         )
                                 )
@@ -82,7 +82,7 @@ public class AssignmentServiceImpl implements AssignmentService{
                 .dueDate(assignment.getDueDate())
                 .maxMarks(assignment.getMaxMarks())
                 .status(assignment.getStatus())
-                .trainerId(assignment.getTrainerId())
+                .trainerId(assignment.getTrainer().getId())
                 .build();
     }
 }

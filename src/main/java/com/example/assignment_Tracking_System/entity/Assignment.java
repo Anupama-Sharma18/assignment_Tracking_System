@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Assignment {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +32,10 @@ public class Assignment {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private Long trainerId;
-
+    // Many assignments can be created by one trainer
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id", nullable = false)
+    private User trainer;
 
     private LocalDateTime createdAt;
 

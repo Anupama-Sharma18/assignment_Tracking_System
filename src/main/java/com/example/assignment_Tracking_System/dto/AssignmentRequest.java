@@ -17,22 +17,21 @@ import java.time.LocalDate;
 @Builder
 public class AssignmentRequest {
 
-    @NotBlank
-    @Size(min = 5, max = 100)
+    @NotBlank(message = "Title is required")
+    @Size(min = 5, max = 100, message = "Title must be between 5 and 100 characters")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "Description is required")
     private String description;
 
-
-
-    @NotNull
-    @Future
+    @NotNull(message = "Due date is required")
+    @Future(message = "Due date must be a future date")
     private LocalDate dueDate;
 
-    @NotNull
-    @Min(1)
+    @NotNull(message = "Maximum marks are required")
+    @Min(value = 1, message = "Maximum marks must be greater than 0")
     private Integer maxMarks;
+
 
     private Long trainerId;
 }

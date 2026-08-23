@@ -83,7 +83,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         // 5. Check student is assigned to assignment
         boolean assigned =
                 assignmentStudentRepository
-                        .existsByAssignmentIdAndStudentId(
+                        .existsByAssignment_IdAndStudent_Id(
                                 assignmentId,
                                 studentId
                         );
@@ -100,7 +100,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         // 6. Check if submission already exists
         boolean submissionExists =
                 submissionRepository
-                        .findByStudentIdAndAssignmentId(
+                        .findByStudent_IdAndAssignment_Id(
                                 studentId,
                                 assignmentId
                         )
@@ -125,8 +125,8 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         // 8. Create submission
         Submission submission = Submission.builder()
-                .assignmentId(assignmentId)
-                .studentId(studentId)
+                .assignment(assignment)
+                .student(student)
                 .submissionText(
                         submissionRequest.getSubmissionText()
                 )
@@ -166,7 +166,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         Submission submission =
                 submissionRepository
-                        .findByStudentIdAndAssignmentId(
+                        .findByStudent_IdAndAssignment_Id(
                                 studentId,
                                 assignmentId
                         )
@@ -208,7 +208,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         Submission submission =
                 submissionRepository
-                        .findByStudentIdAndAssignmentId(
+                        .findByStudent_IdAndAssignment_Id(
                                 studentId,
                                 assignmentId
                         )
@@ -257,7 +257,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         validateStudent(studentId);
 
         List<Submission> submissions =
-                submissionRepository.findAllByStudentId(studentId);
+                submissionRepository.findAllByStudent_Id(studentId);
 
         if (submissions.isEmpty()) {
             throw new ResourceNotFoundException(
@@ -297,7 +297,7 @@ public class SubmissionServiceImpl implements SubmissionService {
                         );
 
         // Make sure submission belongs to student
-        if (!submission.getStudentId()
+        if (!submission.getStudent().getId()
                 .equals(studentId)) {
 
             throw new ResourceNotFoundException(
@@ -358,8 +358,8 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         return SubmissionResponse.builder()
                 .id(submission.getId())
-                .assignmentId(submission.getAssignmentId())
-                .studentId(submission.getStudentId())
+                .assignmentId(submission.getAssignment().getId())
+                .studentId(submission.getStudent().getId())
                 .submissionText(submission.getSubmissionText())
                 .submittedAt(submission.getSubmittedAt())
                 .marks(submission.getMarks())

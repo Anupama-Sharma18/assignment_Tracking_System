@@ -173,6 +173,18 @@ public class AdminServiceImpl implements AdminService {
     public AssignmentResponse createAssignment(
             AssignmentRequest request) {
 
+//        check if the given id is the trainer's id
+        User trainer = userRepository.findByIdAndRole(
+                request.getTrainerId(),
+                User.Role.TRAINER
+        ).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Trainer with id "
+                                + request.getTrainerId()
+                                + " not found"
+                )
+        );
+
         if (request.getTrainerId() == null) {
             throw new InvalidAssignmentException(
                     "Trainer id is required"
@@ -203,17 +215,7 @@ public class AdminServiceImpl implements AdminService {
             );
         }
 
-        // Check trainer
-        User trainer =
-                userRepository.findById(
-                        request.getTrainerId()
-                ).orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Trainer with id "
-                                        + request.getTrainerId()
-                                        + " not found"
-                        )
-                );
+
 
         validateTrainer(trainer);
 
@@ -230,7 +232,7 @@ public class AdminServiceImpl implements AdminService {
                 .dueDate(request.getDueDate())
                 .maxMarks(request.getMaxMarks())
                 .status(Assignment.Status.CREATED)
-                .trainerId(trainer.getId())
+                .trainer(trainer)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
@@ -334,7 +336,7 @@ public class AdminServiceImpl implements AdminService {
 
         if (request.getTrainerId() != null
                 && !request.getTrainerId()
-                .equals(assignment.getTrainerId())) {
+                .equals(assignment.getTrainer().getId())) {
 
             User trainer =
                     userRepository.findById(
@@ -355,8 +357,8 @@ public class AdminServiceImpl implements AdminService {
                 );
             }
 
-            assignment.setTrainerId(
-                    trainer.getId()
+            assignment.setTrainer(
+                    trainer
             );
         }
 
@@ -385,11 +387,11 @@ public class AdminServiceImpl implements AdminService {
                         );
 
         submissionRepository
-                .deleteByAssignmentId(assignmentId);
+                .deleteByAssignment_Id(assignmentId);
 
 
         assignmentStudentRepository
-                .deleteByAssignmentId(assignmentId);
+                .deleteByAssignment_Id(assignmentId);
 
 
         assignmentRepository.delete(assignment);
@@ -404,6 +406,7 @@ public class AdminServiceImpl implements AdminService {
             Long assignmentId,
             StudentIdsRequest request) {
 
+// Check assignment exists
         Assignment assignment =
                 assignmentRepository.findById(assignmentId)
                         .orElseThrow(() ->
@@ -413,7 +416,7 @@ public class AdminServiceImpl implements AdminService {
                                                 + " not found"
                                 )
                         );
-
+// Closed assignment cannot be assigned
         if (assignment.getStatus()
                 == Assignment.Status.CLOSED) {
 
@@ -421,7 +424,7 @@ public class AdminServiceImpl implements AdminService {
                     "Closed assignment cannot be assigned"
             );
         }
-
+        // Validate all students first
         for (Long studentId :
                 request.getStudentIds()) {
 
@@ -434,7 +437,7 @@ public class AdminServiceImpl implements AdminService {
                                                     + " not found"
                                     )
                             );
-
+// Check role
             if (student.getRole()
                     != User.Role.STUDENT) {
 
@@ -444,7 +447,7 @@ public class AdminServiceImpl implements AdminService {
                                 + " is not a student"
                 );
             }
-
+            // Check active
             if (!student.isActive()) {
 
                 throw new InvalidAssignmentException(
@@ -453,42 +456,60 @@ public class AdminServiceImpl implements AdminService {
                                 + " is inactive"
                 );
             }
-
+            // Check duplicate
             boolean alreadyAssigned =
                     assignmentStudentRepository
-                            .existsByAssignmentIdAndStudentId(
+                            .existsByAssignment_IdAndStudent_Id(
                                     assignmentId,
                                     studentId
                             );
 
-            if (!alreadyAssigned) {
-
-                AssignmentStudent assignmentStudent =
-                        AssignmentStudent.builder()
-                                .assignmentId(assignmentId)
-                                .studentId(studentId)
-                                .assignedAt(
-                                        LocalDateTime.now()
-                                )
-                                .build();
-
-                assignmentStudentRepository.save(
-                        assignmentStudent
+            if (alreadyAssigned) {
+                throw new DuplicateResourceException(
+                        "Student with id " + studentId
+                                + " is already assigned to assignment with id "
+                                + assignmentId
                 );
             }
         }
 
-        assignment.setStatus(
-                Assignment.Status.ASSIGNED
-        );
+        // Now actually save assignment-student mapping
+        for (Long studentId :
+                request.getStudentIds()) {
 
-        assignment.setUpdatedAt(
-                LocalDateTime.now()
-        );
+            User student =
+                    userRepository.findById(studentId)
+                            .orElseThrow(() ->
+                                    new ResourceNotFoundException(
+                                            "Student with id "
+                                                    + studentId
+                                                    + " not found"
+                                    )
+                            );
+            AssignmentStudent assignmentStudent =
+                    AssignmentStudent.builder()
+                            .assignment(assignment)
+                            .student(student)
+                            .assignedAt(LocalDateTime.now())
+                            .build();
 
-        assignmentRepository.save(assignment);
+            assignmentStudentRepository.save(
+                    assignmentStudent
+            );
+        }
+
+// Change assignment status
+            assignment.setStatus(
+                    Assignment.Status.ASSIGNED
+            );
+
+            assignment.setUpdatedAt(
+                    LocalDateTime.now()
+            );
+
+            assignmentRepository.save(assignment);
+
     }
-
 
 
     // VIEW SUBMISSIONS
@@ -510,7 +531,7 @@ public class AdminServiceImpl implements AdminService {
                 );
 
         return submissionRepository
-                .findByAssignmentId(assignmentId)
+                .findByAssignment_Id(assignmentId)
                 .stream()
                 .map(this::convertToSubmissionResponse)
                 .toList();
@@ -695,7 +716,7 @@ public UserResponse createStudent(UserRequest request) {
                 .dueDate(assignment.getDueDate())
                 .maxMarks(assignment.getMaxMarks())
                 .status(assignment.getStatus())
-                .trainerId(assignment.getTrainerId())
+                .trainerId(assignment.getTrainer().getId())
                 .build();
     }
 
@@ -705,8 +726,8 @@ public UserResponse createStudent(UserRequest request) {
 
         return SubmissionResponse.builder()
                 .id(submission.getId())
-                .assignmentId(submission.getAssignmentId())
-                .studentId(submission.getStudentId())
+                .assignmentId(submission.getAssignment().getId())
+                .studentId(submission.getStudent().getId())
                 .submissionText(submission.getSubmissionText())
                 .submittedAt(submission.getSubmittedAt())
                 .marks(submission.getMarks())

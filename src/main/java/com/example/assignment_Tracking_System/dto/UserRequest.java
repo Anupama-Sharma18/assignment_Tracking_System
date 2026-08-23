@@ -13,15 +13,14 @@ import lombok.*;
 @Builder
 public class UserRequest {
 
-    @NotBlank
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @NotBlank
-    @Email
-    @Column(unique = true)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank
-    @Size(min = 10, max = 10)
+    @NotBlank(message = "Phone is required")
+    @Size(min = 10, max = 10, message = "Phone must contain exactly 10 digits")
     private String phone;
 }

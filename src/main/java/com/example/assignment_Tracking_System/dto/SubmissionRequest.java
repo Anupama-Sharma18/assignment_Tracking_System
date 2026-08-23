@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 public class SubmissionRequest {
 
-    @NotBlank
+    @NotBlank(message = "Submission text is required")
     private String submissionText;
 }

@@ -11,16 +11,30 @@ import java.util.Optional;
 @Repository
 public interface SubmissionRepository extends JpaRepository<Submission, Long> {
 
-    Optional<Submission> findByStudentIdAndAssignmentId(Long studentId, Long assignmentId);
-    List<Submission> findAllByStudentId(Long studentId);
+    Optional<Submission> findByStudent_IdAndAssignment_Id(
+            Long studentId,
+            Long assignmentId
+    );
 
-    List<Submission> findByAssignmentId(Long assignmentId);
+    List<Submission> findAllByStudent_Id(
+            Long studentId
+    );
 
-    List<Submission> findByAssignmentIdIn(List<Long> assignmentIds);
+    List<Submission> findByAssignment_Id(
+            Long assignmentId
+    );
 
-    void deleteByAssignmentId(Long assignmentId);
+    List<Submission> findByAssignment_IdIn(
+            List<Long> assignmentIds
+    );
 
-    long countByStatus(Submission.Status status);
+    void deleteByAssignment_Id(
+            Long assignmentId
+    );
+
+    long countByStatus(
+            Submission.Status status
+    );
 
 
 }

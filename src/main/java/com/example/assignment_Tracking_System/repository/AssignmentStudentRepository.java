@@ -9,20 +9,20 @@ import java.util.List;
 public interface AssignmentStudentRepository
         extends JpaRepository<AssignmentStudent, Long> {
 
-    boolean existsByAssignmentIdAndStudentId(
+    boolean existsByAssignment_IdAndStudent_Id(
             Long assignmentId,
             Long studentId
     );
 
-    List<AssignmentStudent> findByAssignmentId(
+    List<AssignmentStudent> findByAssignment_Id(
             Long assignmentId
     );
 
-    List<AssignmentStudent> findByStudentId(
+    List<AssignmentStudent> findByStudent_Id(
             Long studentId
     );
 
-    void deleteByAssignmentId(
+    void deleteByAssignment_Id(
             Long assignmentId
     );
 }

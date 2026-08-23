@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface AssignmentRepository
         extends JpaRepository<Assignment, Long> {
 
-    List<Assignment> findByTrainerIdOrderByDueDateAsc(Long trainerId);
+    List<Assignment> findByTrainer_IdOrderByDueDateAsc(Long trainerId);
 
-    Optional<Assignment> findByIdAndTrainerId(
+    Optional<Assignment> findByIdAndTrainer_Id(
             Long assignmentId,
             Long trainerId
     );
