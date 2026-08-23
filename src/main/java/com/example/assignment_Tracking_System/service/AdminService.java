@@ -56,4 +56,19 @@ public interface AdminService {
     List<SubmissionResponse> getAssignmentSubmissions(
             Long assignmentId
     );
+    // Student Management
+
+    UserResponse createStudent(UserRequest request);
+
+    List<UserResponse> getAllStudents();
+
+    UserResponse getStudent(Long studentId);
+
+    UserResponse updateStudent(
+            Long studentId,
+            UserRequest request
+    );
+
+    void deleteStudent(Long studentId);
+
 }
