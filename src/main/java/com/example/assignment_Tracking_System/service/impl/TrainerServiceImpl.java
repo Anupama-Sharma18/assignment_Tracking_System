@@ -33,9 +33,9 @@ public class TrainerServiceImpl implements TrainerService {
     private final SubmissionRepository submissionRepository;
 
 
-    // =========================================================
+
     // CREATE ASSIGNMENT
-    // =========================================================
+
 
     @Override
     public AssignmentResponse createAssignment(
@@ -63,9 +63,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // GET TRAINER ASSIGNMENTS
-    // =========================================================
+
 
     @Override
     @Transactional(readOnly = true)
@@ -82,9 +82,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // GET ASSIGNMENT
-    // =========================================================
+
 
     @Override
     @Transactional(readOnly = true)
@@ -112,9 +112,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // UPDATE ASSIGNMENT
-    // =========================================================
+
 
     @Override
     public AssignmentResponse updateAssignment(
@@ -156,9 +156,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // DELETE ASSIGNMENT
-    // =========================================================
+
 
     @Override
     public void deleteAssignment(
@@ -189,9 +189,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // VIEW STUDENTS
-    // =========================================================
+
 
     @Override
     @Transactional(readOnly = true)
@@ -208,9 +208,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // ASSIGN ASSIGNMENT TO STUDENTS
-    // =========================================================
+
 
     @Override
     public void assignStudents(
@@ -306,9 +306,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // VIEW ASSIGNED STUDENTS
-    // =========================================================
+
 
     @Override
     @Transactional(readOnly = true)
@@ -348,9 +348,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // VIEW ALL TRAINER SUBMISSIONS
-    // =========================================================
+
 
     @Override
     @Transactional(readOnly = true)
@@ -380,9 +380,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // VIEW SUBMISSIONS FOR ASSIGNMENT
-    // =========================================================
+
 
     @Override
     @Transactional(readOnly = true)
@@ -411,9 +411,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // EVALUATE SUBMISSION
-    // =========================================================
+
 
     @Override
     public SubmissionResponse evaluateSubmission(
@@ -500,9 +500,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // GET TRAINER
-    // =========================================================
+
 
     private User getTrainer(Long trainerId) {
 
@@ -537,9 +537,9 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
 
-    // =========================================================
+
     // CONVERTERS
-    // =========================================================
+
 
     private AssignmentResponse convertToAssignmentResponse(
             Assignment assignment) {
