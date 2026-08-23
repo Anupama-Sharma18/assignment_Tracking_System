@@ -18,5 +18,11 @@ public interface AssignmentStudentRepository
             Long assignmentId
     );
 
-    void deleteByAssignmentId(Long assignmentId);
+    List<AssignmentStudent> findByStudentId(
+            Long studentId
+    );
+
+    void deleteByAssignmentId(
+            Long assignmentId
+    );
 }
