@@ -42,6 +42,7 @@ public class AdminController {
     }
 
 
+
     // 2. Get All Trainers
     @GetMapping("/trainers")
     public ResponseEntity<List<UserResponse>>
